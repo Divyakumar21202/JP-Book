@@ -1,25 +1,23 @@
-name: Flutter Test
-
+name: Flutter build Apk
 on: [push]
-
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.19' # You can specify the Flutter version you want to use
-
-    - name: Get dependencies
-      run: flutter pub get
-
-    - name: Run tests
-      run: flutter test
-
-
+    CreateApk:
+        runs-on: ubuntu-latest
         
+        steps:
+        - uses: actions/checkout@v1
 
+        - name: Set Flutter
+          uses: subosito/flutter-action@v1
+          with:
+            flutter-version: '3.19'
+        
+        - name: Clean Build
+          run: flutter clean
+
+        - name: Get Dependencies
+          run: flutter pub get
+        
+        - name: Build Apk
+          run: flutter build apk --split-per-abi
+          
