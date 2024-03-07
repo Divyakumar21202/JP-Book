@@ -33,7 +33,7 @@ jobs:
         - name: Release the Apk
           uses: actions/create-release@v1
           env:
-            GITHUB-TOKEN: ${{secrets.GITHUB_TOKEN}}
+            GITHUB-TOKEN: ${{secrets.TOKEN_JP_BOOK}}
           with:
             tag_name: ${{steps.version.outputs.version}}
             release_name: Release ${{steps.version.outputs.version}}
