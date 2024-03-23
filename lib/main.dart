@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:jp_book/features/User-Data-Widgets/user_total.dart';
 
 void main() {
   runApp(
     const MyApp(),
   );
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -12,6 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       darkTheme: ThemeData.dark(),
+      theme: ThemeData(
+        iconTheme: const IconThemeData(color: Colors.white, size: 40),
+      ),
       debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
     );
@@ -50,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: const [Icon(Icons.perm_contact_calendar), SizedBox(width: 8)],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        enableFeedback: true,
         unselectedItemColor: Colors.white,
         selectedItemColor: Colors.blue,
         items: _bottomNavigationBarItemList,
@@ -60,7 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: const Center(
-        child: Text('Hello World'),
+        child: Column(
+          children: [
+            UserTotal(credit: '345', debit: '500'),
+            Expanded(child: SizedBox()),
+          ],
+        ),
       ),
     );
   }
