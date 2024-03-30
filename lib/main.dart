@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jp_book/features/User-Data-Widgets/user_total.dart';
 
 void main() {
   runApp(
@@ -13,9 +12,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      darkTheme: ThemeData.dark(),
       theme: ThemeData(
-        iconTheme: const IconThemeData(color: Colors.white, size: 40),
+        scaffoldBackgroundColor: Colors.grey[200],
+        appBarTheme: const AppBarTheme(color: Colors.blue, elevation: 0),
+        iconTheme: const IconThemeData(color: Colors.blue, size: 28),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(
+            fontSize: 7,
+            color: Colors.black,
+          ),
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
@@ -65,14 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {});
         },
       ),
-      body: const Center(
-        child: Column(
-          children: [
-            UserTotal(credit: '345', debit: '500'),
-            Expanded(child: SizedBox()),
-          ],
-        ),
-      ),
+      body: const HomeScreen(),
     );
   }
 }
