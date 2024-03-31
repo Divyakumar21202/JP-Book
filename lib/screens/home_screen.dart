@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jp_book/features/User-Data-Widgets/sigle_user_data_screen.dart';
+import 'package:jp_book/features/select-contact/controller/select_contact_controller.dart';
 import 'package:jp_book/features/select-contact/screen/contact_list_screen.dart';
 import 'package:jp_book/screens/parties_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final List<BottomNavigationBarItem> _bottomNavigationBarItemList = const [
     BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Parties'),
     BottomNavigationBarItem(
@@ -49,11 +51,21 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: const Color(0xFF800000),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ContactListScreen(),
-            ),
-          );
+          ref.read(contactControllerProvider).getContacts().then((value) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ContactListScreen(
+                  contacts: value,
+                ),
+              ),
+            );
+          }).onError((error, stackTrace) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(error.toString()),
+              ),
+            );
+          });
         },
         label: const Text(
           'ADD CUSTOMER',

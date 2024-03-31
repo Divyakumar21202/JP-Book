@@ -3,10 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jp_book/features/select-contact/controller/select_contact_controller.dart';
+import 'package:jp_book/features/Add-customer/screens/add_party_screen.dart';
 
 class ContactListScreen extends ConsumerStatefulWidget {
-  const ContactListScreen({super.key});
+  final List<Contact> contacts;
+  const ContactListScreen({super.key, required this.contacts});
 
   @override
   ConsumerState<ContactListScreen> createState() => _ContactListScreenState();
@@ -16,8 +17,8 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
   final TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
-    super.initState();
     getContacts();
+    super.initState();
   }
 
   @override
@@ -29,17 +30,8 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
   List<Contact> contacts = [];
   List<Contact> searchList = [];
   void getContacts() {
-    ref.read(contactControllerProvider).getContacts().then((value) {
-      contacts = value;
-      searchList = contacts;
-      setState(() {});
-    }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error.toString()),
-        ),
-      );
-    });
+    contacts = widget.contacts;
+    setState(() {});
   }
 
   @override
@@ -56,7 +48,7 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
             child: TextField(
               controller: _searchController,
               onChanged: (val) {
-                searchList = contacts
+                searchList = widget.contacts
                     .where((element) => element.displayName
                         .toLowerCase()
                         .contains(_searchController.text.toLowerCase()))
@@ -78,19 +70,35 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: searchList.length,
+              itemCount: widget.contacts.length,
               itemBuilder: ((context, index) {
-                Contact person = searchList[index];
+                Contact person = widget.contacts[index];
                 Uint8List? photo = person.photo ?? person.thumbnail;
-                String phone =
-                    person.phones.isEmpty ? '' : person.phones.first.toString();
+                String phone = '';
+                if (person.phones.isNotEmpty) {
+                  phone = person.phones[0].number.replaceAll(' ', '');
+                  setState(() {});
+                }
                 String letter = person.displayName[0];
-                return ListTile(
-                  title: Text(person.displayName),
-                  subtitle: Text(phone),
-                  leading: CircleAvatar(
-                    backgroundImage: photo != null ? MemoryImage(photo) : null,
-                    child: Text(letter),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddPartyScreen(
+                          name: person.displayName,
+                          mobileNumber: phone,
+                        ),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(person.displayName),
+                    subtitle: Text(phone),
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          photo != null ? MemoryImage(photo) : null,
+                      child: Text(letter),
+                    ),
                   ),
                 );
               }),
