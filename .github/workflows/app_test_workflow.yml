@@ -1,50 +1,86 @@
-name: Flutter build Apk
+# name: Flutter build Apk
+# on:
+#   push:
+#     branches:
+#       main
+#       master
+
+
+      
+# jobs:
+#     CreateApk:
+#         runs-on: ubuntu-latest
+        
+#         steps:
+#         - uses: actions/checkout@v1
+
+#         - name: Set Flutter
+#           uses: subosito/flutter-action@v1
+#           with:
+#             flutter-version: '3.19'
+        
+#         - name: Clean Build
+#           run: flutter clean
+
+#         - name: Get Dependencies
+#           run: flutter pub get
+        
+#         - name: Build Apk
+#           run: flutter build apk --split-per-abi
+        
+#         # -
+
+        
+#         # - name: Archieve-Apk-Releases
+#         #   uses: actions/upload-artifact@v1
+#         #   with:
+#         #     name: Releases-Apks
+#         #     path:
+#         #         build\app\outputs\flutter-apk\app-armeabi-v7a-release.apk
+#         #         build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+#         #         # build/app/outputs/flutter-apk/app-x86_64-release.apk
+#         - name: Release the Apk
+#           uses: ncipollo/release-action@v1
+#           with:
+#             artifacts: "build/app/outputs/flutter-apk/app-arm64-v8a-release.apk"
+#             tag: v1.1.${{ github.run_number }}
+#             token: ${{ secrets.JP_BOOK_TOKEN }}
+
+        
+            
+name: JP Book Workflow
 on:
   push:
     branches:
       main
       master
 
+jobs:
+  Make-Apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: 3.19
+
+      - name: Clean Gradle Build
+        run: flutter clean
+
+      - name: Getting Dependencies
+        run: flutter pub get
+
+      - name: Build Apk
+        run: flutter build apk --release
+
+      - name: Releaset the Apk
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v1.1.${{ github.run_number }}
+          token: ${{ secrets.JP_BOOK_TOKEN }}
 
       
-jobs:
-    CreateApk:
-        runs-on: ubuntu-latest
-        
-        steps:
-        - uses: actions/checkout@v1
 
-        - name: Set Flutter
-          uses: subosito/flutter-action@v1
-          with:
-            flutter-version: '3.19'
-        
-        - name: Clean Build
-          run: flutter clean
-
-        - name: Get Dependencies
-          run: flutter pub get
-        
-        - name: Build Apk
-          run: flutter build apk --split-per-abi
-        
-        # -
-
-        
-        # - name: Archieve-Apk-Releases
-        #   uses: actions/upload-artifact@v1
-        #   with:
-        #     name: Releases-Apks
-        #     path:
-        #         build\app\outputs\flutter-apk\app-armeabi-v7a-release.apk
-        #         build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-        #         # build/app/outputs/flutter-apk/app-x86_64-release.apk
-        - name: Release the Apk
-          uses: ncipollo/release-action@v1
-          with:
-            artifacts: "build/app/outputs/flutter-apk/app-arm64-v8a-release.apk"
-            tag: v1.1.${{ github.run_number }}
-            token: ${{ secrets.JP_BOOK_TOKEN }}
-
-        
-            
+  
