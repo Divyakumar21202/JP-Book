@@ -6,6 +6,9 @@ class AppTextField extends StatefulWidget {
   final String hintText;
   final ValueChanged onSubmitted;
   final Icon? icon;
+  final TextInputType inputType;
+  final Text? prefix;
+  final String label;
   const AppTextField({
     super.key,
     required this.controller,
@@ -13,6 +16,9 @@ class AppTextField extends StatefulWidget {
     required this.onSubmitted,
     required this.hintText,
     this.icon,
+    required this.inputType,
+    this.prefix,
+    this.label = '',
   });
 
   @override
@@ -28,19 +34,19 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-      child: TextField(
-        controller: widget.controller,
-        onChanged: widget.onChange,
-        onSubmitted: widget.onSubmitted,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          suffixIcon: widget.icon,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(7),
-          ),
+    return TextField(
+      controller: widget.controller,
+      onChanged: widget.onChange,
+      onSubmitted: widget.onSubmitted,
+      keyboardType: widget.inputType,
+      decoration: InputDecoration(
+        labelText: widget.label,
+        prefix: widget.prefix,
+        hintText: widget.hintText,
+        hintStyle: Theme.of(context).textTheme.titleMedium!,
+        suffixIcon: widget.icon,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(7),
         ),
       ),
     );

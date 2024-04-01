@@ -13,7 +13,7 @@ class UserTotal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: Colors.blue.shade900,
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
       child: Column(
         children: [

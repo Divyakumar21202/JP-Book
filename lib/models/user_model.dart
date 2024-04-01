@@ -10,4 +10,5 @@ class User {
     required this.credit,
     required this.transactions,
   });
+  
 }

@@ -6,7 +6,7 @@ class SingleUserTotalWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: Colors.blue.shade900,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       child: Container(
         decoration: BoxDecoration(

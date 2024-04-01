@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "96297398775",
+    "project_id": "jaydeep-plastic-book",
+    "storage_bucket": "jaydeep-plastic-book.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96297398775:android:46629dbea168c709d93ef2",
+        "android_client_info": {
+          "package_name": "com.example.jp_book"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-1xWsyUwrNFU7_UJkAcPNaonBXlNcvN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

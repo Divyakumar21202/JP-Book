@@ -8,7 +8,7 @@ class SelectContactRepository {
     List<Contact> list = [];
     try {
       if (await FlutterContacts.requestPermission()) {
-        list = await FlutterContacts.getContacts();
+        list = await FlutterContacts.getContacts(withProperties: true);
         return list;
       } else {
         throw Exception('Give Permission to access Contacts');

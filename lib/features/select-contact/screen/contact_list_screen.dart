@@ -18,6 +18,7 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
   @override
   void initState() {
     getContacts();
+
     super.initState();
   }
 
@@ -31,6 +32,7 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
   List<Contact> searchList = [];
   void getContacts() {
     contacts = widget.contacts;
+    searchList = widget.contacts;
     setState(() {});
   }
 
@@ -70,14 +72,23 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: widget.contacts.length,
+              itemCount: searchList.length,
               itemBuilder: ((context, index) {
-                Contact person = widget.contacts[index];
+                Contact person = searchList[index];
                 Uint8List? photo = person.photo ?? person.thumbnail;
                 String phone = '';
                 if (person.phones.isNotEmpty) {
                   phone = person.phones[0].number.replaceAll(' ', '');
-                  setState(() {});
+                  if (phone.isEmpty) {
+                    for (var doc in person.phones) {
+                      if (doc.number.isNotEmpty) {
+                        phone = doc.number.replaceAll(' ', '');
+                      }
+                    }
+                  }
+                  if (phone.substring(0, 3) == '+91') {
+                    phone = phone.substring(3);
+                  }
                 }
                 String letter = person.displayName[0];
                 return GestureDetector(
@@ -93,7 +104,10 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
                   },
                   child: ListTile(
                     title: Text(person.displayName),
-                    subtitle: Text(phone),
+                    subtitle: Text(
+                      phone,
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
                     leading: CircleAvatar(
                       backgroundImage:
                           photo != null ? MemoryImage(photo) : null,
@@ -103,7 +117,7 @@ class _ContactListScreenState extends ConsumerState<ContactListScreen> {
                 );
               }),
             ),
-          )
+          ),
         ],
       ),
     );

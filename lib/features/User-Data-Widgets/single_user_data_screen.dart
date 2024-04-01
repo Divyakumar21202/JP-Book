@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:jp_book/constants/buttons/money_button.dart';
 import 'package:jp_book/features/User-Data-Widgets/single_user_total_widget.dart';
+import 'package:jp_book/features/transaction/screens/transaction_screen.dart';
 import 'package:jp_book/widgets/single_entry_widget.dart';
 
 class SingleUserDataScreen extends StatelessWidget {
-  const SingleUserDataScreen({super.key});
-
+  final String name;
+  final String mobileNumber;
+  const SingleUserDataScreen({
+    super.key,
+    required this.mobileNumber,
+    required this.name,
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
-          leading: const CircleAvatar(
+          leading: CircleAvatar(
             foregroundColor: Colors.blue,
             backgroundColor: Colors.white,
-            child: Text('CY'),
+            child: Text(name[0]),
           ),
           title: Text(
-            'Clg Yash',
+            name,
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
                 .copyWith(color: Colors.white),
+            overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
             'View settings',
@@ -67,17 +74,43 @@ class SingleUserDataScreen extends StatelessWidget {
           Container(
             color: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 7),
-            child: const Row(
+            child: Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 7,
                 ),
-                MoneyButton(status: 'GAVE'),
-                SizedBox(
+                MoneyButton(
+                  status: 'GAVE',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TransactionScreen(
+                          mobileNumber: mobileNumber,
+                          name: name,
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
                   width: 7,
                 ),
-                MoneyButton(status: 'GOT'),
-                SizedBox(
+                MoneyButton(
+                  status: 'GOT',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TransactionScreen(
+                          mobileNumber: mobileNumber,
+                          name: name,
+                          color: Colors.green,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
                   width: 7,
                 ),
               ],

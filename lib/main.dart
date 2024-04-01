@@ -1,17 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jp_book/firebase_options.dart';
 import 'package:jp_book/screens/home_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.lightBlue[900],
     ),
   );
   runApp(
-    const ProviderScope(child:  MyApp()),
+    const ProviderScope(child: MyApp()),
   );
 }
 
@@ -23,10 +26,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.grey[200],
-        appBarTheme: const AppBarTheme(
-          color: Colors.blue,
+        appBarTheme: AppBarTheme(
+          color: Colors.blue.shade900,
           elevation: 0,
           foregroundColor: Colors.white,
+        ),
+        radioTheme: RadioThemeData(
+          overlayColor: MaterialStatePropertyAll(Colors.grey.shade200),
+          fillColor: MaterialStatePropertyAll(
+            Colors.blue.shade900,
+          ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

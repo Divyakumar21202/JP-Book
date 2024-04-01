@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jp_book/features/User-Data-Widgets/sigle_user_data_screen.dart';
 import 'package:jp_book/features/select-contact/controller/select_contact_controller.dart';
 import 'package:jp_book/features/select-contact/screen/contact_list_screen.dart';
 import 'package:jp_book/screens/parties_screen.dart';
@@ -37,13 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         actions: [
           GestureDetector(
             child: const Icon(Icons.perm_contact_calendar),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const SingleUserDataScreen(),
-                ),
-              );
-            },
+            onTap: () {},
           ),
           const SizedBox(width: 8)
         ],
