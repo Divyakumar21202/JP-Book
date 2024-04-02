@@ -5,6 +5,7 @@ class TransactionModel {
   final bool isCredit;
   final String mobileNumber;
   final String date;
+  final String transactionId;
 
   TransactionModel({
     required this.time,
@@ -13,6 +14,7 @@ class TransactionModel {
     required this.isCredit,
     required this.mobileNumber,
     required this.date,
+    required this.transactionId,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class TransactionModel {
       'isCredit': isCredit,
       'mobileNumber': mobileNumber,
       'date': date,
+      'transactionId': transactionId,
     };
   }
 
@@ -34,6 +37,7 @@ class TransactionModel {
       isCredit: map['isCredit'] as bool,
       mobileNumber: map['mobileNumber'] as String,
       date: map['date'] as String,
+      transactionId: map['transactionId'] as String,
     );
   }
 }

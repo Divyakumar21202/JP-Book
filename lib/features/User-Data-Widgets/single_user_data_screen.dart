@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jp_book/constants/app_loader.dart';
 import 'package:jp_book/constants/buttons/money_button.dart';
+import 'package:jp_book/features/User-Data-Widgets/repository/user_data_repository.dart';
 import 'package:jp_book/features/User-Data-Widgets/single_user_total_widget.dart';
 import 'package:jp_book/features/transaction/screens/transaction_screen.dart';
+import 'package:jp_book/models/transaction_model.dart';
 import 'package:jp_book/widgets/single_entry_widget.dart';
 
-class SingleUserDataScreen extends StatelessWidget {
+class SingleUserDataScreen extends ConsumerWidget {
   final String name;
   final String mobileNumber;
   const SingleUserDataScreen({
@@ -13,7 +17,7 @@ class SingleUserDataScreen extends StatelessWidget {
     required this.name,
   });
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: ListTile(
@@ -60,16 +64,32 @@ class SingleUserDataScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: ((context, index) {
-                return const SingleEntryWidget(
-                  balance: '79',
-                  description: 'this is the rupees i recieve',
-                  time: '25 Mar 24 05:30 PM',
-                );
-              }),
-            ),
+            child: StreamBuilder(
+                stream: ref
+                    .watch(userDataRepositoryProvider)
+                    .getUserAllTransactions(mobileNumber),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const AppLoader();
+                  }
+                  List<TransactionModel> list = [];
+                  list = snapshot.data ?? snapshot.data!;
+                  return ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: ((context, index) {
+                      var singleEntry = list[index];
+                      DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(
+                          int.parse(singleEntry.time));
+                      return SingleEntryWidget(
+                        balance: singleEntry.amount.toString(),
+                        description: singleEntry.reason,
+                        time: DateTime.now().day == dateTime.day
+                            ? 'Today'
+                            : 'Yesterday',
+                      );
+                    }),
+                  );
+                }),
           ),
           Container(
             color: Colors.white,
@@ -88,6 +108,7 @@ class SingleUserDataScreen extends StatelessWidget {
                           mobileNumber: mobileNumber,
                           name: name,
                           color: Colors.red,
+                          isCredit: false,
                         ),
                       ),
                     );
@@ -105,6 +126,7 @@ class SingleUserDataScreen extends StatelessWidget {
                           mobileNumber: mobileNumber,
                           name: name,
                           color: Colors.green,
+                          isCredit: true,
                         ),
                       ),
                     );

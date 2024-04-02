@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jp_book/constants/app_loader.dart';
 import 'package:jp_book/constants/app_snackbar.dart';
 import 'package:jp_book/constants/app_text_field.dart';
 import 'package:jp_book/constants/buttons/app_button.dart';
 import 'package:jp_book/features/transaction/repository/transaction_repository.dart';
 import 'package:jp_book/models/transaction_model.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionScreen extends ConsumerStatefulWidget {
   final String name;
   final String mobileNumber;
   final Color color;
+  final bool isCredit;
   const TransactionScreen({
     super.key,
     required this.mobileNumber,
     required this.name,
     required this.color,
+    required this.isCredit,
   });
 
   @override
@@ -74,174 +79,192 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: widget.color,
-        title: Text(
-          'You gave Rs $rupees to ${widget.name}',
-          overflow: TextOverflow.ellipsis,
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayWidgetBuilder: (_) {
+        return const AppLoader();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: widget.color,
+          title: Text(
+            'You gave Rs $rupees to ${widget.name}',
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7.0),
-        child: Column(
-          children: [
-            AppTextField(
-              label: 'Enter Amount',
-              controller: _rupeesController,
-              onChange: (val) {
-                setState(() {
-                  if (val.toString().isEmpty) {
-                    rupees = '0';
-                  } else {
-                    rupees = val.toString();
-                  }
-                });
-              },
-              onSubmitted: (val) {
-                setState(() {
-                  if (val.toString().isEmpty) {
-                    rupees = '0';
-                  } else {
-                    rupees = val.toString();
-                  }
-                });
-              },
-              hintText: 'Enter Amount',
-              inputType: TextInputType.number,
-              prefix: const Text('Rs. '),
-            ),
-            rupees != '0'
-                ? Expanded(
-                    child: Column(children: [
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    AppTextField(
-                      label: 'Enter Details',
-                      controller: _reasonController,
-                      onChange: (val) {
-                        setState(() {
-                          if (val.toString().isEmpty) {
-                            reason = 'empty string';
-                          } else {
-                            reason = val.toString();
-                          }
-                        });
-                      },
-                      onSubmitted: (val) {
-                        setState(() {
-                          if (val.toString().isEmpty) {
-                            reason = 'empty string';
-                          } else {
-                            reason = val.toString();
-                          }
-                        });
-                      },
-                      hintText: 'Enter details (Items,bill no.,quantity,etc.)',
-                      inputType: TextInputType.text,
-                    ),
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Add Bill No.',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: Colors.blue,
-                                  ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 14,
-                    ),
-                    Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _selectDate(context);
-                          },
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_month_outlined,
-                                color: widget.color,
-                                size: 14,
-                              ),
-                              const SizedBox(width: 2),
-                              Text(
-                                date.isEmpty
-                                    ? '${dateTime.day} ${getMonthName(dateTime.month)} ${dateTime.year}'
-                                    : date,
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                              Icon(
-                                Icons.arrow_drop_down,
-                                color: widget.color,
-                              )
-                            ],
-                          ),
-                        ),
-                        const Expanded(child: SizedBox()),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.camera_alt,
-                                color: widget.color,
-                                size: 28,
-                              ),
-                              const SizedBox(width: 2),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Text(
-                                  'Attach bills',
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7.0),
+          child: Column(
+            children: [
+              AppTextField(
+                label: 'Enter Amount',
+                controller: _rupeesController,
+                onChange: (val) {
+                  setState(() {
+                    if (val.toString().isEmpty) {
+                      rupees = '0';
+                    } else {
+                      rupees = val.toString();
+                    }
+                  });
+                },
+                onSubmitted: (val) {
+                  setState(() {
+                    if (val.toString().isEmpty) {
+                      rupees = '0';
+                    } else {
+                      rupees = val.toString();
+                    }
+                  });
+                },
+                hintText: 'Enter Amount',
+                inputType: TextInputType.number,
+                prefix: const Text('Rs. '),
+              ),
+              rupees != '0'
+                  ? Expanded(
+                      child: Column(children: [
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      AppTextField(
+                        label: 'Enter Details',
+                        controller: _reasonController,
+                        onChange: (val) {
+                          setState(() {
+                            if (val.toString().isEmpty) {
+                              reason = 'empty string';
+                            } else {
+                              reason = val.toString();
+                            }
+                          });
+                        },
+                        onSubmitted: (val) {
+                          setState(() {
+                            if (val.toString().isEmpty) {
+                              reason = 'empty string';
+                            } else {
+                              reason = val.toString();
+                            }
+                          });
+                        },
+                        hintText:
+                            'Enter details (Items,bill no.,quantity,etc.)',
+                        inputType: TextInputType.text,
+                      ),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'Add Bill No.',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  color: Colors.blue,
+                                ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 14,
+                      ),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              _selectDate(context);
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: widget.color,
+                                  size: 14,
+                                ),
+                                const SizedBox(width: 2),
+                                Text(
+                                  date.isEmpty
+                                      ? '${dateTime.day} ${getMonthName(dateTime.month)} ${dateTime.year}'
+                                      : date,
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
-                              ),
-                            ],
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: widget.color,
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          const Expanded(child: SizedBox()),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: widget.color,
+                                  size: 28,
+                                ),
+                                const SizedBox(width: 2),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Text(
+                                    'Attach bills',
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Expanded(child: SizedBox())
+                    ]))
+                  : const Expanded(child: SizedBox()),
+              Row(
+                children: [
+                  Expanded(
+                    child: AppButton(
+                      onPressed: () async {
+                        TransactionModel model = TransactionModel(
+                          time:
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          reason: reason,
+                          amount: int.parse(rupees),
+                          isCredit: widget.isCredit,
+                          mobileNumber: widget.mobileNumber,
+                          date:
+                              '${DateTime.now().day} ${getMonthName(DateTime.now().month).toString().substring(0, 3)} ${DateTime.now().year}',
+                          transactionId: const Uuid().v1(),
+                        );
+                        context.loaderOverlay.show();
+                        ref
+                            .read(transactionRepositoryProvider)
+                            .uploadTransaction(model)
+                            .onError((error, stackTrace) {
+                          context.loaderOverlay.hide();
+                          AppSnackBar(
+                                  context: context, message: error.toString())
+                              .show();
+                        }).then((_) {
+                          context.loaderOverlay.hide();
+                          Navigator.pop(context);
+                        });
+                      },
+                      text: 'SAVE',
+                      color: widget.color,
                     ),
-                    const Expanded(child: SizedBox())
-                  ]))
-                : const Expanded(child: SizedBox()),
-            Row(
-              children: [
-                Expanded(
-                  child: AppButton(
-                    onPressed: () async {
-                      TransactionModel model = TransactionModel(
-                        time: DateTime.now().millisecondsSinceEpoch.toString(),
-                        reason: reason,
-                        amount: int.parse(rupees),
-                        isCredit: false,
-                        mobileNumber: widget.mobileNumber,
-                        date:
-                            '${DateTime.now().day} ${getMonthName(DateTime.now().month).toString().substring(0, 3)} ${DateTime.now().year}',
-                      );
-
-                      await ref
-                          .read(transactionRepositoryProvider)
-                          .uploadTransaction(model)
-                          .whenComplete(() {
-                        AppSnackBar(context: context, message: reason).show();
-                      });
-                    },
-                    text: 'SAVE',
-                    color: widget.color,
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
