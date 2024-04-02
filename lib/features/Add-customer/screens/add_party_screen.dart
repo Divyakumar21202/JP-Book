@@ -147,18 +147,17 @@ class _AddPartyScreenState extends ConsumerState<AddPartyScreen> {
                               .then(
                             (_) {
                               context.loaderOverlay.hide();
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => SingleUserDataScreen(
-                                    mobileNumber: widget.mobileNumber,
-                                    name: widget.name,
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => SingleUserDataScreen(
+                                      mobileNumber: widget.mobileNumber,
+                                      name: widget.name,
+                                    ),
                                   ),
-                                ),
-                              );
+                                  ModalRoute.withName('/'));
                             },
                           ).onError((error, stack) {
                             context.loaderOverlay.hide();
-
                             AppSnackBar(
                               context: context,
                               message: error.toString(),
