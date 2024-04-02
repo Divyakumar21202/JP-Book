@@ -2,8 +2,8 @@ name: JP Book Workflow
 on:
   push:
     branches:
-      main
-      master
+      - main
+      - master
 
 jobs:
   Make-Apk:
