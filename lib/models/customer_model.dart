@@ -6,6 +6,4 @@ class Customer {
     required this.name,
     required this.mobileNumber,
   });
-
-  
 }

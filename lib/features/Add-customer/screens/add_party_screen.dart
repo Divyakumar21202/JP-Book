@@ -143,7 +143,7 @@ class _AddPartyScreenState extends ConsumerState<AddPartyScreen> {
                           context.loaderOverlay.show();
                           await ref
                               .watch(transactionRepositoryProvider)
-                              .addCustomer(widget.mobileNumber)
+                              .addCustomer(mobileNumber:  widget.mobileNumber,customerName: widget.name)
                               .then(
                             (_) {
                               context.loaderOverlay.hide();

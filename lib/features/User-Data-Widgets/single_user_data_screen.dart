@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jp_book/constants/app_loader.dart';
 import 'package:jp_book/constants/buttons/money_button.dart';
+import 'package:jp_book/constants/functions/month_conversion.dart';
 import 'package:jp_book/features/User-Data-Widgets/repository/user_data_repository.dart';
 import 'package:jp_book/features/User-Data-Widgets/single_user_total_widget.dart';
 import 'package:jp_book/features/transaction/screens/transaction_screen.dart';
@@ -73,19 +74,33 @@ class SingleUserDataScreen extends ConsumerWidget {
                     return const AppLoader();
                   }
                   List<TransactionModel> list = [];
-                  list = snapshot.data ?? snapshot.data!;
+                  if (snapshot.hasData) {
+                    list = snapshot.data!;
+                  }
                   return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: ((context, index) {
                       var singleEntry = list[index];
-                      DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(
-                          int.parse(singleEntry.time));
+                      DateTime dateTime = DateTime.parse(
+                        singleEntry.time,
+                      );
+                      int dayDiff = DateTime.now().difference(dateTime).inDays;
+                      String day = '';
+                      if (dayDiff == 0) {
+                        day = 'today';
+                      } else if (dayDiff == 1) {
+                        day = 'Yesterday';
+                      } else {
+                        day =
+                            '${dateTime.day} ${monthConversion(dateTime.month)} ${dateTime.year}';
+                      }
+                      int balance = singleEntry.total;
                       return SingleEntryWidget(
-                        balance: singleEntry.amount.toString(),
+                        balance: balance.isNegative
+                            ? (-1 * balance).toString()
+                            : balance.toString(),
                         description: singleEntry.reason,
-                        time: DateTime.now().day == dateTime.day
-                            ? 'Today'
-                            : 'Yesterday',
+                        time: day,
                       );
                     }),
                   );

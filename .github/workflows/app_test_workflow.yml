@@ -30,3 +30,4 @@ jobs:
         with:
           tag: v1.1.${{ github.run_number }}
           token: ${{ secrets.JP_BOOK_TOKEN }}
+          

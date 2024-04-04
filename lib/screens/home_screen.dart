@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jp_book/features/select-contact/controller/select_contact_controller.dart';
 import 'package:jp_book/features/select-contact/screen/contact_list_screen.dart';
 import 'package:jp_book/screens/parties_screen.dart';
 
@@ -44,21 +43,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: const Color(0xFF800000),
         onPressed: () {
-          ref.read(contactControllerProvider).getContacts().then((value) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ContactListScreen(
-                  contacts: value,
-                ),
-              ),
-            );
-          }).onError((error, stackTrace) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(error.toString()),
-              ),
-            );
-          });
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: ((context) => const ContactListScreen())));
         },
         label: const Text(
           'ADD CUSTOMER',

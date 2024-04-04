@@ -50,6 +50,7 @@ class UserDataRepository {
           .collection('customers')
           .doc(mobileNumber)
           .collection('transactions')
+          .orderBy('time', descending: true)
           .snapshots()
           .asyncMap((event) {
         List<TransactionModel> list = [];
@@ -57,6 +58,29 @@ class UserDataRepository {
           list.add(TransactionModel.fromMap(element.data()));
         }
         return list;
+      });
+    } catch (e) {
+      throw FirebaseException(plugin: e.toString());
+    }
+  }
+
+  Stream<Map<String, int>> getTotal() {
+    try {
+      return repository.firebaseFirestore
+          .collectionGroup('customers')
+          .snapshots()
+          .asyncMap((event) {
+        int credit = 0;
+        int debit = 0;
+        for (var element in event.docs) {
+          TransactionModel model = TransactionModel.fromMap(element.data());
+          if (model.total >= 0) {
+            debit += model.total;
+          } else {
+            credit += model.total;
+          }
+        }
+        return {'credit': credit, 'debit': debit};
       });
     } catch (e) {
       throw FirebaseException(plugin: e.toString());

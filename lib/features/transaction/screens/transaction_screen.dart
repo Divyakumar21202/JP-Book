@@ -233,12 +233,13 @@ class _TransactionScreenState extends ConsumerState<TransactionScreen> {
                     child: AppButton(
                       onPressed: () async {
                         TransactionModel model = TransactionModel(
-                          time:
-                              DateTime.now().millisecondsSinceEpoch.toString(),
+                          time: DateTime.now().toIso8601String(),
                           reason: reason,
                           amount: int.parse(rupees),
                           isCredit: widget.isCredit,
                           mobileNumber: widget.mobileNumber,
+                          customerName: widget.name,
+                          total: 0,
                           date:
                               '${DateTime.now().day} ${getMonthName(DateTime.now().month).toString().substring(0, 3)} ${DateTime.now().year}',
                           transactionId: const Uuid().v1(),

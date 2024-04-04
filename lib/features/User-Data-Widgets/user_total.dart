@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jp_book/features/User-Data-Widgets/repository/user_data_repository.dart';
 
 class UserTotal extends StatelessWidget {
   final String debit;
@@ -100,7 +102,7 @@ class UserTotal extends StatelessWidget {
   }
 }
 
-class ColumnData extends StatelessWidget {
+class ColumnData extends ConsumerWidget {
   final bool isCredit;
   final String amount;
   const ColumnData({
@@ -110,11 +112,35 @@ class ColumnData extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     String status = isCredit ? 'You will give' : 'You will get';
-    Text rupees = Text('rs $amount',
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(
-            color: isCredit ? Colors.green.shade900 : Colors.red.shade900));
+    var rupees = StreamBuilder(
+        stream: ref.watch(userDataRepositoryProvider).getTotal(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            Text(
+              'rs $amount',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color:
+                        isCredit ? Colors.green.shade900 : Colors.red.shade900,
+                  ),
+            );
+          }
+          int credit = 0;
+          int debit = 0;
+          if (snapshot.hasData) {
+            Map<String, int> map = snapshot.data!;
+            credit = map['credit'] ?? 0;
+            debit = map['debit'] ?? 0;
+          }
+          return Text(
+              isCredit
+                  ? 'Rs ${credit.isNegative ? -1 * credit : credit}'
+                  : 'Rs $debit',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color:
+                      isCredit ? Colors.green.shade900 : Colors.red.shade900));
+        });
 
     return Column(
       children: [
