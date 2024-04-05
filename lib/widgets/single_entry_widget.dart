@@ -4,13 +4,16 @@ class SingleEntryWidget extends StatelessWidget {
   final String time;
   final String balance;
   final String description;
+  final bool isCredit;
+  final int amount;
 
-  const SingleEntryWidget({
-    super.key,
-    required this.balance,
-    required this.description,
-    required this.time,
-  });
+  const SingleEntryWidget(
+      {super.key,
+      required this.amount,
+      required this.balance,
+      required this.description,
+      required this.time,
+      required this.isCredit});
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +56,26 @@ class SingleEntryWidget extends StatelessWidget {
           ),
           Expanded(
             flex: 1,
-            child: Text(
-              'Rs 50',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            child: isCredit
+                ? const SizedBox()
+                : Text(
+                    'Rs $amount',
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          color: Colors.red.shade900,
+                        ),
+                  ),
           ),
           Expanded(
             flex: 1,
-            child: Text(
-              'Rs 16',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            child: isCredit
+                ? Text(
+                    'Rs $amount',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(color: Colors.green.shade900),
+                  )
+                : const SizedBox(),
           )
         ],
       ),

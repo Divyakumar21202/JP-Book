@@ -86,4 +86,18 @@ class UserDataRepository {
       throw FirebaseException(plugin: e.toString());
     }
   }
+
+  Stream<int> getSingleUserTotal({required String mobileNumber}) {
+    try {
+    return repository.firebaseFirestore
+          .collection('users')
+          .doc('9484676117')
+          .collection('customers')
+          .doc(mobileNumber)
+          .snapshots()
+          .map((event) => event.data()!['total']);
+    } catch (e) {
+      throw FirebaseException(plugin: e.toString());
+    }
+  }
 }

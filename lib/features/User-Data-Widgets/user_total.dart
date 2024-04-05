@@ -23,8 +23,7 @@ class UserTotal extends StatelessWidget {
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(14),
-                    topRight: Radius.circular(14))),
+                    topLeft: Radius.circular(7), topRight: Radius.circular(7))),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 7),
               child: Row(
@@ -56,10 +55,12 @@ class UserTotal extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(14),
-                    bottomRight: Radius.circular(14))),
+              color: Colors.grey[200],
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(7),
+                bottomRight: Radius.circular(7),
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

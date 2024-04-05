@@ -22,7 +22,9 @@ class CustomerRepository {
           .asyncMap((event) {
         List<TransactionModel> list = [];
         for (var element in event.docs) {
-          list.add(TransactionModel.fromMap(element.data()));
+          if (element['total'] != 0 || element['amount'] != 0) {
+            list.add(TransactionModel.fromMap(element.data()));
+          }
         }
         return list;
       });

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jp_book/constants/app_loader.dart';
 import 'package:jp_book/constants/buttons/money_button.dart';
+import 'package:jp_book/constants/functions/get_user_two_char.dart';
 import 'package:jp_book/constants/functions/month_conversion.dart';
 import 'package:jp_book/features/User-Data-Widgets/repository/user_data_repository.dart';
 import 'package:jp_book/features/User-Data-Widgets/single_user_total_widget.dart';
@@ -21,11 +22,14 @@ class SingleUserDataScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        leadingWidth: 7,
+        centerTitle: false,
         title: ListTile(
+          horizontalTitleGap: 14,
           leading: CircleAvatar(
             foregroundColor: Colors.blue,
             backgroundColor: Colors.white,
-            child: Text(name[0]),
+            child: Text(getUserTwoChar(name)),
           ),
           title: Text(
             name,
@@ -50,17 +54,51 @@ class SingleUserDataScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          const SingleUserTotalWidget(),
+          SingleUserTotalWidget(
+            mobileNumber: mobileNumber,
+          ),
           Container(
             color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 21),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Icon(Icons.person_off_rounded),
-                Icon(Icons.currency_rupee_sharp),
-                Icon(Icons.wechat_sharp),
-                Icon(Icons.sms_outlined),
+                Column(
+                  children: [
+                    const Icon(Icons.edit_document),
+                    Text(
+                      'Report',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Icon(Icons.currency_rupee_sharp),
+                    Text(
+                      'Payment',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Icon(Icons.wechat_sharp),
+                    Text(
+                      'Reminder',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    const Icon(Icons.sms_outlined),
+                    Text(
+                      'SMS',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )
+                  ],
+                ),
               ],
             ),
           ),
@@ -95,13 +133,67 @@ class SingleUserDataScreen extends ConsumerWidget {
                             '${dateTime.day} ${monthConversion(dateTime.month)} ${dateTime.year}';
                       }
                       int balance = singleEntry.total;
-                      return SingleEntryWidget(
-                        balance: balance.isNegative
-                            ? (-1 * balance).toString()
-                            : balance.toString(),
-                        description: singleEntry.reason,
-                        time: day,
-                      );
+                      if (index == 0) {
+                        return Column(
+                          children: [
+                            Container(
+                              color: Colors.white,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 11, vertical: 7),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 7),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      'ENTRIES',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'You GAVE',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      )),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'You GOT',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      )),
+                                ],
+                              ),
+                            ),
+                            SingleEntryWidget(
+                              amount: singleEntry.amount,
+                              balance: balance.isNegative
+                                  ? (-1 * balance).toString()
+                                  : balance.toString(),
+                              description: singleEntry.reason,
+                              time: day,
+                              isCredit: singleEntry.isCredit,
+                            )
+                          ],
+                        );
+                      } else {
+                        return SingleEntryWidget(
+                          amount: singleEntry.amount,
+                          balance: balance.isNegative
+                              ? (-1 * balance).toString()
+                              : balance.toString(),
+                          isCredit: singleEntry.isCredit,
+                          description: singleEntry.reason,
+                          time: day,
+                        );
+                      }
                     }),
                   );
                 }),

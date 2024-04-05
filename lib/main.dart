@@ -34,6 +34,11 @@ class MyApp extends StatelessWidget {
           elevation: 0,
           foregroundColor: Colors.white,
         ),
+        cardTheme: CardTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3.5),
+          ),
+        ),
         radioTheme: RadioThemeData(
           overlayColor: MaterialStatePropertyAll(Colors.grey.shade200),
           fillColor: MaterialStatePropertyAll(
