@@ -18,7 +18,9 @@ A new Flutter project.
 
 ## Contibution :
 
-Contribution are open .Also give your valuable feedback for improvement for this project.If you find any issue pls make a issue report on the issues section in this repository.
+Contribution are open .
+
+If you find any issue pls make a issue report on the issues section in this repository.
 
 
 ![](https://github.com/Divyakumar21202/JP-Book/assets/124331485/b22076ab-02fb-475c-8778-d61f30920925)
