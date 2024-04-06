@@ -22,8 +22,7 @@ class SingleUserDataScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 7,
-        centerTitle: false,
+        automaticallyImplyLeading: false,
         title: ListTile(
           horizontalTitleGap: 14,
           leading: CircleAvatar(
