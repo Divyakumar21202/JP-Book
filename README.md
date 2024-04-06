@@ -22,5 +22,6 @@ Contribution are open .
 
 If you find any issue pls make a issue report on the issues section in this repository.
 
-
-![](https://github.com/Divyakumar21202/JP-Book/assets/124331485/b22076ab-02fb-475c-8778-d61f30920925)
+<div align="center">
+    <img src="https://github.com/Divyakumar21202/JP-Book/assets/124331485/b22076ab-02fb-475c-8778-d61f30920925" style="max-width: 50%; height: auto;">
+</div>
